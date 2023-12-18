@@ -8,6 +8,7 @@ import PySimpleGUI as sg  # pip install pysimplegui
 # import af egne moduler
 from windows_GUI.settingswindow import settings_window
 from lav_mtidsudtraek import lav_tidsudtraek
+from helper.helper import file_exists, folder_exists
 
 
 def main_window():
@@ -53,14 +54,18 @@ def main_window():
 
         if event == "Lav nyt Tidsudtræk":
             window.disappear()
-            file_name_indlaes = basename(values["-IN-"])
-            current_date = datetime.date.today().strftime("%Y_%m_%d")
-            file_name_newudtraek = current_date + file_name_indlaes
-            file_path_newudtraek = join(values["-OUT-"], file_name_newudtraek)
-            lav_tidsudtraek(values["-IN-"], file_path_newudtraek)
+            if file_exists(values["-IN-"]) and folder_exists(values["-OUT-"]):
+                file_name_indlaes = basename(values["-IN-"])
+                current_date = datetime.date.today().strftime("%Y_%m_%d")
+                file_name_newudtraek = current_date + file_name_indlaes
+                file_path_newudtraek = join(values["-OUT-"], file_name_newudtraek)
+                lav_tidsudtraek(values["-IN-"], file_path_newudtraek)
 
-            sg.popup_no_titlebar(f"Nyt Tidsudtræk dannet: {file_name_newudtraek}")
-
+                sg.popup_no_titlebar(f"Nyt Tidsudtræk dannet: {file_name_newudtraek}")
+            else:
+                sg.popup_no_titlebar(
+                    f'Fejl i filnavn: {values["-IN-"]} \neller \nmappenavn: {values["-OUT-"]}'
+                )
             window.reappear()
             window.bring_to_front()
 
