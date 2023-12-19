@@ -1,6 +1,8 @@
 import shutil
 import pandas as pd
 from os.path import exists
+from os.path import join
+import datetime
 
 
 def indlaes_excelark(file_path, sheetname):
@@ -32,3 +34,9 @@ def folder_exists(folder_name: str) -> bool:
         return True
     else:
         return False
+
+
+def create_file_path_name(path_name: str, file_name_basis: str) -> str:
+    current_date = datetime.date.today().strftime("%Y%m%d")
+    file_name = current_date + "_" + file_name_basis
+    return join(path_name, file_name)

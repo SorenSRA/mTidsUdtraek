@@ -1,6 +1,4 @@
 from pathlib import Path  # core python module
-from os.path import join, basename
-import datetime
 
 import pandas as pd  # pip install pandas openpyxl
 import PySimpleGUI as sg  # pip install pysimplegui
@@ -8,7 +6,7 @@ import PySimpleGUI as sg  # pip install pysimplegui
 # import af egne moduler
 from windows_GUI.settingswindow import settings_window
 from lav_mtidsudtraek import lav_tidsudtraek
-from helper.helper import file_exists, folder_exists
+from helper.helper import file_exists, folder_exists, create_file_path_name
 
 
 def main_window():
@@ -55,13 +53,12 @@ def main_window():
         if event == "Lav nyt Tidsudtræk":
             window.disappear()
             if file_exists(values["-IN-"]) and folder_exists(values["-OUT-"]):
-                file_name_indlaes = basename(values["-IN-"])
-                current_date = datetime.date.today().strftime("%Y_%m_%d")
-                file_name_newudtraek = current_date + file_name_indlaes
-                file_path_newudtraek = join(values["-OUT-"], file_name_newudtraek)
+                file_path_newudtraek = create_file_path_name(
+                    values["-OUT-"], settings["PROGRAM"]["basis_file_name"]
+                )
                 lav_tidsudtraek(values["-IN-"], file_path_newudtraek)
 
-                sg.popup_no_titlebar(f"Nyt Tidsudtræk dannet: {file_name_newudtraek}")
+                sg.popup_no_titlebar(f"Nyt Tidsudtræk dannet: {file_path_newudtraek}")
             else:
                 sg.popup_no_titlebar(
                     f'Fejl i filnavn: {values["-IN-"]} \neller \nmappenavn: {values["-OUT-"]}'
