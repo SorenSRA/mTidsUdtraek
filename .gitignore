@@ -1,0 +1,9 @@
+mtidsudtraek/ownfunc/__pycache__/
+mtidsudtraek/helper/__pycache__/
+mtidsudtraek/constants/__pycache__/
+mtidsudtraek/windows_GUI/__pycache__/
+mtidsudtraek/__pycache__/
+mtidsudtraek/dist/
+mtidsudtraek/build/
+.venv/
+Data/

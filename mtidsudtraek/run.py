@@ -10,7 +10,8 @@ from helper.helper import file_exists, folder_exists, create_file_path_name
 
 
 def main_window():
-    default_folder = settings["PROGRAM"]["outputfolder_default"]
+    input_default_folder = settings["PROGRAM"]["inputfolder_default"]
+    output_default_folder = settings["PROGRAM"]["outputfolder_default"]
     # ------ GUI Definition ------ #
     layout = [
         [sg.Text("", s=20)],
@@ -18,13 +19,14 @@ def main_window():
             sg.T("Input File:", s=15, justification="r"),
             sg.I(s=60, key="-IN-"),
             sg.FileBrowse(
-                initial_folder=default_folder, file_types=(("Excel Files", "*.xls*"),)
+                initial_folder=input_default_folder,
+                file_types=(("Excel Files", "*.xls*"),),
             ),
         ],
         [
             sg.T("Output Folder:", s=15, justification="r"),
-            sg.I(s=60, default_text=default_folder, key="-OUT-"),
-            sg.FolderBrowse(initial_folder=default_folder),
+            sg.I(s=60, default_text=output_default_folder, key="-OUT-"),
+            sg.FolderBrowse(initial_folder=output_default_folder),
         ],
         [sg.Text("", s=20)],
         [
@@ -51,15 +53,15 @@ def main_window():
             window.bring_to_front()
 
         if event == "Lav nyt Tidsudtræk":
-            window.disappear()
             if file_exists(values["-IN-"]) and folder_exists(values["-OUT-"]):
                 file_path_newudtraek = create_file_path_name(
                     values["-OUT-"], settings["PROGRAM"]["basis_file_name"]
                 )
                 lav_tidsudtraek(values["-IN-"], file_path_newudtraek)
-
+                window.disappear()
                 sg.popup_no_titlebar(f"Nyt Tidsudtræk dannet: {file_path_newudtraek}")
             else:
+                window.disappear()
                 sg.popup_no_titlebar(
                     f'Fejl i filnavn: {values["-IN-"]} \neller \nmappenavn: {values["-OUT-"]}'
                 )
